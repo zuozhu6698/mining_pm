@@ -38,6 +38,21 @@ VALID_FIELDTYPES = {
 }
 
 LAYOUT_TYPES = {"Section Break", "Column Break", "Tab Break", "Fold", "Heading"}
+PERMISSION_FLAGS = {
+    "read",
+    "write",
+    "create",
+    "delete",
+    "submit",
+    "cancel",
+    "amend",
+    "report",
+    "export",
+    "import",
+    "share",
+    "print",
+    "email",
+}
 
 DEPRECATED = {"Text Chart"}
 SNAKE_CASE = re.compile(r"^[a-z][a-z0-9_]*$")
@@ -128,11 +143,19 @@ def check(path: Path) -> None:
             if line and not NAMING_SERIES_PAT.match(line):
                 err(f"naming_series option {line!r} bad format (e.g. ENG-.YYYY.-.####)")
 
-    # permissions 必须空
+    # permissions 可以配置；如配置，必须是 Frappe 权限行结构。
     perms = data.get("permissions", [])
-    if perms:
-        err(f"'permissions' should be empty (got {len(perms)} entries). "
-            "Use Role Permission Manager instead.")
+    if not isinstance(perms, list):
+        err("'permissions' should be a list")
+    for i, perm in enumerate(perms):
+        if not isinstance(perm, dict):
+            err(f"permissions[{i}] is not a dict")
+            continue
+        if not perm.get("role"):
+            err(f"permissions[{i}] missing role")
+        for flag in PERMISSION_FLAGS:
+            if flag in perm and perm[flag] not in {0, 1}:
+                err(f"permissions[{i}].{flag} should be 0 or 1")
 
 
 def main() -> int:

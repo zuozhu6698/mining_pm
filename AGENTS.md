@@ -87,7 +87,9 @@ apps/mining_pm/mining_pm/mining_pm/doctype/<snake_case_name>/
   "name": "Engineering Project",
   "naming_rule": "By \"Naming Series\" field",
   "owner": "Administrator",
-  "permissions": [],
+  "permissions": [
+    {"role": "System Manager", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1, "share": 1, "print": 1, "email": 1}
+  ],
   "sort_field": "creation",
   "sort_order": "DESC",
   "states": [],
@@ -96,7 +98,7 @@ apps/mining_pm/mining_pm/mining_pm/doctype/<snake_case_name>/
 ```
 
 **关键点**：
-- `"permissions": []` 留空，由 Role Permission Manager 管，不在 JSON 硬编码
+- `"permissions"` 至少给 `System Manager` 全权限，否则 DocType 在 UI 无法访问
 - `"naming_series"` 字段的 `options` 必须是 `ENG-.YYYY.-.####` 这种格式（注意点号）
 - `"is_submittable": 1` 用于需要 Draft → Submitted 流转的 DocType
 - 时间戳照抄 `2026-05-19 00:00:00`，Frappe 不会校验
@@ -200,6 +202,7 @@ python /home/frappe/frappe-bench/apps/mining_pm/scripts/validate-doctype.py \
 - ❌ 不直接 push 到 main（受 branch protection 阻止，但 Codex 不要尝试 bypass）
 - ❌ 不用 `git push --force`
 - ❌ 不在代码里硬编码数据库密码 / API key
+- ❌ `permissions` 不能留空数组，否则 DocType 在 UI 无法访问；至少给 System Manager 全权限
 
 ## 11. 失败处理
 

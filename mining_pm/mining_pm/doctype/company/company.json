@@ -1,0 +1,85 @@
+{
+  "actions": [],
+  "autoname": "field:company_name",
+  "creation": "2026-05-19 00:00:00",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "company_name",
+    "abbreviation",
+    "parent_company",
+    "is_group",
+    "country",
+    "default_currency",
+    "notes"
+  ],
+  "fields": [
+    {
+      "fieldname": "company_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "公司名称",
+      "reqd": 1
+    },
+    {
+      "fieldname": "abbreviation",
+      "fieldtype": "Data",
+      "label": "公司简称"
+    },
+    {
+      "fieldname": "parent_company",
+      "fieldtype": "Link",
+      "label": "上级公司",
+      "options": "Company"
+    },
+    {
+      "default": "0",
+      "fieldname": "is_group",
+      "fieldtype": "Check",
+      "label": "是否集团节点"
+    },
+    {
+      "default": "中国",
+      "fieldname": "country",
+      "fieldtype": "Data",
+      "label": "所在国家"
+    },
+    {
+      "default": "CNY",
+      "fieldname": "default_currency",
+      "fieldtype": "Data",
+      "label": "默认币种"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Long Text",
+      "label": "备注"
+    }
+  ],
+  "is_submittable": 0,
+  "links": [],
+  "modified": "2026-05-19 00:00:00",
+  "modified_by": "Administrator",
+  "module": "Mining PM",
+  "name": "Company",
+  "naming_rule": "By fieldname",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 1
+}
