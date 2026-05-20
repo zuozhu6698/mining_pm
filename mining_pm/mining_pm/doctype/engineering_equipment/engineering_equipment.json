@@ -1,0 +1,110 @@
+{
+  "actions": [],
+  "creation": "2026-05-19 00:00:00",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "equipment_name",
+    "model",
+    "serial_no",
+    "quantity",
+    "usage_hours",
+    "actual_hours",
+    "hourly_rate",
+    "total_cost",
+    "status",
+    "notes"
+  ],
+  "fields": [
+    {
+      "fieldname": "equipment_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "设备名称",
+      "reqd": 1
+    },
+    {
+      "fieldname": "model",
+      "fieldtype": "Data",
+      "label": "型号"
+    },
+    {
+      "fieldname": "serial_no",
+      "fieldtype": "Data",
+      "label": "编号"
+    },
+    {
+      "default": "1",
+      "fieldname": "quantity",
+      "fieldtype": "Int",
+      "in_list_view": 1,
+      "label": "数量",
+      "reqd": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "usage_hours",
+      "fieldtype": "Float",
+      "label": "计划工时"
+    },
+    {
+      "default": "0",
+      "fieldname": "actual_hours",
+      "fieldtype": "Float",
+      "label": "实际工时"
+    },
+    {
+      "default": "0",
+      "fieldname": "hourly_rate",
+      "fieldtype": "Currency",
+      "label": "台班费率"
+    },
+    {
+      "default": "0",
+      "fieldname": "total_cost",
+      "fieldtype": "Currency",
+      "label": "总成本",
+      "read_only": 1
+    },
+    {
+      "default": "待用",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "状态",
+      "options": "待用\n使用中\n已归还\n维修中"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "备注"
+    }
+  ],
+  "is_submittable": 0,
+  "istable": 1,
+  "links": [],
+  "modified": "2026-05-19 00:00:00",
+  "modified_by": "Administrator",
+  "module": "Mining PM",
+  "name": "Engineering Equipment",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "idx",
+  "sort_order": "ASC",
+  "states": [],
+  "track_changes": 1
+}

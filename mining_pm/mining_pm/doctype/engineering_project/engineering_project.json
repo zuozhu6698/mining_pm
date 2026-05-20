@@ -24,6 +24,14 @@
     "status",
     "finance_section",
     "total_budget",
+    "items_section",
+    "items",
+    "materials_section",
+    "materials",
+    "equipments_section",
+    "equipments",
+    "approval_logs_section",
+    "approval_logs",
     "notes"
   ],
   "fields": [
@@ -138,6 +146,50 @@
       "fieldname": "total_budget",
       "fieldtype": "Currency",
       "label": "预算金额"
+    },
+    {
+      "fieldname": "items_section",
+      "fieldtype": "Section Break",
+      "label": "工程量清单"
+    },
+    {
+      "fieldname": "items",
+      "fieldtype": "Table",
+      "label": "工程量清单",
+      "options": "Engineering Item"
+    },
+    {
+      "fieldname": "materials_section",
+      "fieldtype": "Section Break",
+      "label": "材料明细"
+    },
+    {
+      "fieldname": "materials",
+      "fieldtype": "Table",
+      "label": "材料明细",
+      "options": "Engineering Material"
+    },
+    {
+      "fieldname": "equipments_section",
+      "fieldtype": "Section Break",
+      "label": "设备明细"
+    },
+    {
+      "fieldname": "equipments",
+      "fieldtype": "Table",
+      "label": "设备明细",
+      "options": "Engineering Equipment"
+    },
+    {
+      "fieldname": "approval_logs_section",
+      "fieldtype": "Section Break",
+      "label": "审批日志"
+    },
+    {
+      "fieldname": "approval_logs",
+      "fieldtype": "Table",
+      "label": "审批日志",
+      "options": "Engineering Approval Log"
     },
     {
       "fieldname": "notes",
