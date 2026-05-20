@@ -1,0 +1,78 @@
+{
+  "actions": [],
+  "creation": "2026-05-19 00:00:00",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "step",
+    "approver",
+    "action",
+    "action_date",
+    "comments"
+  ],
+  "fields": [
+    {
+      "fieldname": "step",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "审批环节",
+      "reqd": 1
+    },
+    {
+      "fieldname": "approver",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "审批人",
+      "options": "User",
+      "reqd": 1
+    },
+    {
+      "default": "提交",
+      "fieldname": "action",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "操作",
+      "options": "提交\n同意\n驳回\n转交",
+      "reqd": 1
+    },
+    {
+      "fieldname": "action_date",
+      "fieldtype": "Datetime",
+      "in_list_view": 1,
+      "label": "操作时间",
+      "reqd": 1
+    },
+    {
+      "fieldname": "comments",
+      "fieldtype": "Small Text",
+      "label": "审批意见"
+    }
+  ],
+  "is_submittable": 0,
+  "istable": 1,
+  "links": [],
+  "modified": "2026-05-19 00:00:00",
+  "modified_by": "Administrator",
+  "module": "Mining PM",
+  "name": "Engineering Approval Log",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "idx",
+  "sort_order": "ASC",
+  "states": [],
+  "track_changes": 1
+}

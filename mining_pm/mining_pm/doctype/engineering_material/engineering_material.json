@@ -1,0 +1,104 @@
+{
+  "actions": [],
+  "creation": "2026-05-19 00:00:00",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "material_name",
+    "spec",
+    "unit",
+    "planned_qty",
+    "actual_qty",
+    "unit_price",
+    "total_cost",
+    "supplier",
+    "notes"
+  ],
+  "fields": [
+    {
+      "fieldname": "material_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "材料名称",
+      "reqd": 1
+    },
+    {
+      "fieldname": "spec",
+      "fieldtype": "Data",
+      "label": "规格型号"
+    },
+    {
+      "default": "kg",
+      "fieldname": "unit",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "单位",
+      "reqd": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "planned_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "计划用量",
+      "reqd": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "actual_qty",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "实际用量"
+    },
+    {
+      "default": "0",
+      "fieldname": "unit_price",
+      "fieldtype": "Currency",
+      "label": "单价"
+    },
+    {
+      "default": "0",
+      "fieldname": "total_cost",
+      "fieldtype": "Currency",
+      "label": "总成本",
+      "read_only": 1
+    },
+    {
+      "fieldname": "supplier",
+      "fieldtype": "Data",
+      "label": "供应商"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "备注"
+    }
+  ],
+  "is_submittable": 0,
+  "istable": 1,
+  "links": [],
+  "modified": "2026-05-19 00:00:00",
+  "modified_by": "Administrator",
+  "module": "Mining PM",
+  "name": "Engineering Material",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "idx",
+  "sort_order": "ASC",
+  "states": [],
+  "track_changes": 1
+}
