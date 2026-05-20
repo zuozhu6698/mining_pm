@@ -1,0 +1,133 @@
+name: Deploy to 180
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # 允许手动触发
+
+concurrency:
+  group: deploy-180
+  cancel-in-progress: false   # 不取消旧的部署，排队执行
+
+jobs:
+  deploy:
+    name: Deploy Frappe app to 192.168.8.180
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          known_hosts: ' '  # placeholder, replaced below
+          if_key_exists: replace
+
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.DEPLOY_PORT }} -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy via SSH
+        id: deploy
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          FRAPPE_SITE: ${{ secrets.FRAPPE_SITE }}
+          GIT_SHA: ${{ github.sha }}
+        run: |
+          ssh -p $DEPLOY_PORT $DEPLOY_USER@$DEPLOY_HOST bash <<'ENDSSH'
+            set -euo pipefail
+
+            BENCH_DIR=/home/frappe/frappe-bench
+            APP_DIR=$BENCH_DIR/apps/mining_pm
+
+            echo "═══ Step 1: Sync code ═══"
+            if [ ! -d "$APP_DIR/.git" ]; then
+              echo "❌ $APP_DIR is not a git repo, run bench get-app once first"
+              exit 1
+            fi
+            sudo -u frappe git -C "$APP_DIR" fetch origin
+            sudo -u frappe git -C "$APP_DIR" reset --hard origin/main
+
+            echo "═══ Step 2: Install deps ═══"
+            cd $BENCH_DIR
+            sudo -u frappe bench setup requirements --node || true
+
+            echo "═══ Step 3: Migrate DB ═══"
+            sudo -u frappe bench --site mining.local migrate
+
+            echo "═══ Step 4: Build assets ═══"
+            sudo -u frappe bench build --app mining_pm
+
+            echo "═══ Step 5: Restart supervisor ═══"
+            sudo supervisorctl restart all
+
+            echo "═══ Step 6: Health check ═══"
+            sleep 5
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/api/method/ping)
+            echo "HTTP code: $HTTP_CODE"
+            if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "403" ]; then
+              echo "❌ Health check failed"
+              exit 1
+            fi
+
+            echo "✅ Deploy success"
+          ENDSSH
+
+      - name: Notify Feishu on success
+        if: success() && env.FEISHU_WEBHOOK != ''
+        env:
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          COMMIT_SHA: ${{ github.sha }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+        run: |
+          SHORT_SHA="${COMMIT_SHA:0:7}"
+          # 关键词：Codex / mining_pm / 部署
+          curl -s -X POST "$FEISHU_WEBHOOK" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"msg_type\": \"interactive\",
+              \"card\": {
+                \"header\": {
+                  \"title\": {\"content\": \"✅ Codex mining_pm 部署成功\", \"tag\": \"plain_text\"},
+                  \"template\": \"green\"
+                },
+                \"elements\": [
+                  {\"tag\": \"div\", \"text\": {\"content\": \"**提交：** \`$SHORT_SHA\`\n**说明：** ${COMMIT_MSG//\"/\\\"}\n**访问：** http://192.168.8.180/\", \"tag\": \"lark_md\"}},
+                  {\"tag\": \"action\", \"actions\": [
+                    {\"tag\": \"button\", \"text\": {\"content\": \"打开 Frappe\", \"tag\": \"plain_text\"}, \"url\": \"http://192.168.8.180/\", \"type\": \"primary\"}
+                  ]}
+                ]
+              }
+            }"
+
+      - name: Notify Feishu on failure
+        if: failure() && env.FEISHU_WEBHOOK != ''
+        env:
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          COMMIT_SHA: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          SHORT_SHA="${COMMIT_SHA:0:7}"
+          # 关键词：Codex / mining_pm / 部署
+          curl -s -X POST "$FEISHU_WEBHOOK" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"msg_type\": \"interactive\",
+              \"card\": {
+                \"header\": {
+                  \"title\": {\"content\": \"❌ Codex mining_pm 部署失败\", \"tag\": \"plain_text\"},
+                  \"template\": \"red\"
+                },
+                \"elements\": [
+                  {\"tag\": \"div\", \"text\": {\"content\": \"**提交：** \`$SHORT_SHA\`\n**需要人工查看 GitHub Actions 日志**\", \"tag\": \"lark_md\"}},
+                  {\"tag\": \"action\", \"actions\": [
+                    {\"tag\": \"button\", \"text\": {\"content\": \"查看日志\", \"tag\": \"plain_text\"}, \"url\": \"$RUN_URL\", \"type\": \"danger\"}
+                  ]}
+                ]
+              }
+            }"

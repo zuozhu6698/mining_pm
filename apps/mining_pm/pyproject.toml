@@ -1,0 +1,16 @@
+[project]
+name = "mining_pm"
+authors = [
+    { name = "Mining PM Team", email = "mining_pm@example.com"}
+]
+description = "井下采掘工程管理系统 - Underground mining engineering project management"
+requires-python = ">=3.10"
+readme = "README.md"
+dynamic = ["version"]
+dependencies = [
+    # "frappe~=15.0.0"   # 在 Frappe app 里不能列 frappe 自身
+]
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
