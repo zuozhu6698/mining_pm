@@ -1,0 +1,80 @@
+{
+  "actions": [],
+  "autoname": "field:department_name",
+  "creation": "2026-05-19 00:00:00",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "department_name",
+    "company",
+    "parent_department",
+    "is_group",
+    "department_head",
+    "notes"
+  ],
+  "fields": [
+    {
+      "fieldname": "department_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "部门名称",
+      "reqd": 1
+    },
+    {
+      "fieldname": "company",
+      "fieldtype": "Link",
+      "label": "所属公司",
+      "options": "Company",
+      "reqd": 1
+    },
+    {
+      "fieldname": "parent_department",
+      "fieldtype": "Link",
+      "label": "上级部门",
+      "options": "Department"
+    },
+    {
+      "default": "0",
+      "fieldname": "is_group",
+      "fieldtype": "Check",
+      "label": "是否上级部门"
+    },
+    {
+      "fieldname": "department_head",
+      "fieldtype": "Link",
+      "label": "部门负责人",
+      "options": "User"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Long Text",
+      "label": "备注"
+    }
+  ],
+  "is_submittable": 0,
+  "links": [],
+  "modified": "2026-05-19 00:00:00",
+  "modified_by": "Administrator",
+  "module": "Mining PM",
+  "name": "Department",
+  "naming_rule": "By fieldname",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 1
+}
