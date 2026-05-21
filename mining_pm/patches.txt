@@ -1,1 +1,2 @@
 # Patches go here
+mining_pm.patches.v0_0_2.sync_fixtures
