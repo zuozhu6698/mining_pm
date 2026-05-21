@@ -60,3 +60,4 @@ class TestEngineeringProjectWorkflow(FrappeTestCase):
         doc.reload()
 
         self.assertEqual(doc.status, "Completed")
+        self.assertEqual(doc.docstatus, 0)
