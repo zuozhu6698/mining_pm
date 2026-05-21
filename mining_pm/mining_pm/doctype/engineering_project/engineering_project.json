@@ -132,8 +132,9 @@
       "default": "Draft",
       "fieldname": "status",
       "fieldtype": "Select",
+      "in_workflow": 1,
       "in_list_view": 1,
-      "label": "状态",
+      "label": "工作流状态",
       "options": "Draft\nSubmitted\nApproved\nIn Progress\nCompleted\nRejected",
       "reqd": 1
     },
@@ -205,7 +206,23 @@
   "name": "Engineering Project",
   "naming_rule": "By \"Naming Series\" field",
   "owner": "Administrator",
-  "permissions": [],
+  "permissions": [
+    {
+      "amend": 1,
+      "cancel": 1,
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "submit": 1,
+      "write": 1
+    }
+  ],
   "sort_field": "creation",
   "sort_order": "DESC",
   "states": [],

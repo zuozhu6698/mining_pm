@@ -10,7 +10,8 @@ app_email = "mining_pm@example.com"
 app_license = "Proprietary"
 app_version = "0.0.1"
 
-# 后续会扩展：
-# doc_events = {}
-# scheduler_events = {}
-# fixtures = []
+fixtures = [
+    "Workflow State",
+    "Workflow Action Master",
+    {"dt": "Workflow", "filters": [["name", "=", "Engineering Project Workflow"]]},
+]
