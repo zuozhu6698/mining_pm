@@ -1,0 +1,87 @@
+[
+  {
+    "doctype": "Workflow",
+    "document_type": "Engineering Project",
+    "is_active": 1,
+    "name": "Engineering Project Workflow",
+    "send_email_alert": 0,
+    "states": [
+      {
+        "allow_edit": "System Manager",
+        "doc_status": "0",
+        "state": "Draft"
+      },
+      {
+        "allow_edit": "System Manager",
+        "doc_status": "0",
+        "state": "Submitted"
+      },
+      {
+        "allow_edit": "System Manager",
+        "doc_status": "1",
+        "state": "Approved"
+      },
+      {
+        "allow_edit": "System Manager",
+        "doc_status": "1",
+        "state": "In Progress"
+      },
+      {
+        "allow_edit": "System Manager",
+        "doc_status": "1",
+        "state": "Completed"
+      },
+      {
+        "allow_edit": "System Manager",
+        "doc_status": "0",
+        "state": "Rejected"
+      }
+    ],
+    "transitions": [
+      {
+        "action": "Submit",
+        "allow_self_approval": 1,
+        "allowed": "System Manager",
+        "next_state": "Submitted",
+        "state": "Draft"
+      },
+      {
+        "action": "Approve",
+        "allow_self_approval": 1,
+        "allowed": "System Manager",
+        "next_state": "Approved",
+        "state": "Submitted"
+      },
+      {
+        "action": "Reject",
+        "allow_self_approval": 1,
+        "allowed": "System Manager",
+        "next_state": "Rejected",
+        "state": "Submitted"
+      },
+      {
+        "action": "Start Construction",
+        "allow_self_approval": 1,
+        "allowed": "System Manager",
+        "next_state": "In Progress",
+        "state": "Approved"
+      },
+      {
+        "action": "Complete",
+        "allow_self_approval": 1,
+        "allowed": "System Manager",
+        "next_state": "Completed",
+        "state": "In Progress"
+      },
+      {
+        "action": "Reopen",
+        "allow_self_approval": 1,
+        "allowed": "System Manager",
+        "next_state": "Draft",
+        "state": "Rejected"
+      }
+    ],
+    "workflow_name": "Engineering Project Workflow",
+    "workflow_state_field": "status"
+  }
+]
