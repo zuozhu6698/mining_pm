@@ -20,7 +20,7 @@ from frappe.modules.import_file import import_file_by_path
 def execute() -> None:
     """Re-import all mining_pm fixture files."""
     app_path = frappe.get_app_path("mining_pm")
-    fixtures_dir = Path(app_path) / "fixtures"
+    fixtures_dir = Path(app_path) / "mining_pm" / "fixtures"
 
     if not fixtures_dir.exists():
         print(f"[sync_fixtures] No fixtures dir at {fixtures_dir}, skip")
