@@ -175,6 +175,16 @@ class TestEngineeringProject(FrappeTestCase):
 9. PR 描述里 link 回 issue（Closes #N）
 ```
 
+## 8.1 PR 提交前必做
+
+push 前必须跑：
+
+```bash
+bash scripts/pre-pr-check.sh
+```
+
+只有 6 项自检全过才能 push。PR body 必须按 `.github/PULL_REQUEST_TEMPLATE.md` 填写，`自检报告` 字段必须粘贴 `/tmp/pre-pr-report.md` 的内容，不能留空。
+
 ## 9. 验证命令（你自己跑）
 
 写完代码必须自己跑这 3 条，**全绿才能开 PR**：

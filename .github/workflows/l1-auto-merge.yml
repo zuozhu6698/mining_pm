@@ -1,0 +1,85 @@
+name: L1 Auto Merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  l1-auto-merge:
+    name: L1 whitelist and auto merge
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    env:
+      FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+    steps:
+      - name: Check authorized author
+        env:
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          set -euo pipefail
+          case "$PR_AUTHOR" in
+            zuozhu6698|*codex*|*Codex*|*openai*|*OpenAI*)
+              echo "Authorized author: $PR_AUTHOR"
+              ;;
+            *)
+              echo "Unauthorized author for L1 auto-merge: $PR_AUTHOR" >&2
+              exit 1
+              ;;
+          esac
+
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Fetch main
+        run: |
+          set -euo pipefail
+          git fetch origin main
+
+      - name: Check L1 whitelist
+        run: |
+          set -euo pipefail
+          mapfile -t changed_files < <(git diff --name-only origin/main...HEAD)
+          printf 'Changed files:\n'
+          printf '  %s\n' "${changed_files[@]}"
+          bash scripts/check-l1-whitelist.sh "${changed_files[@]}"
+
+      - name: Run pre-PR self-check
+        run: |
+          set -euo pipefail
+          bash scripts/pre-pr-check.sh
+
+      - name: Label PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          set -euo pipefail
+          gh pr edit "$PR_URL" --add-label "l1-auto-merge"
+
+      - name: Enable auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          set -euo pipefail
+          gh pr merge "$PR_URL" --auto --squash
+
+      - name: Notify Feishu
+        if: env.FEISHU_WEBHOOK != ''
+        env:
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          curl -sS -X POST "$FEISHU_WEBHOOK" \
+            -H "Content-Type: application/json" \
+            -d "{\"msg_type\":\"text\",\"content\":{\"text\":\"🤖 L1 PR #$PR_NUMBER 已自动合并\"}}"
